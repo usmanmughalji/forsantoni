@@ -666,8 +666,12 @@ dtb-$(CONFIG_ARCH_SDM429) += sdm429-mtp.dtb \
 
 endif
 
+<<<<<<< HEAD
 dtb-$(CONFIG_ARCH_SDM845_VM) += sdm845-vm.dtb
 
+=======
+dtb-$(CONFIG_MACH_XIAOMI_SANTONI) := xiaomi-santoni.dtb
+>>>>>>> 355181a881b3... ARM: dts: import Xiaomi changes for Redmi 4X
 always		:= $(dtb-y)
 subdir-y	:= $(dts-dirs)
 clean-files	:= *.dtb
