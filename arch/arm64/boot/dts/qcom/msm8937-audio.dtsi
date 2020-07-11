@@ -124,11 +124,11 @@
 				<&pmic_analog_codec>;
 		asoc-codec-names = "msm-stub-codec.1", "msm-dig-codec",
 					"analog-codec";
-		/delete-property/ asoc-wsa-codec-names = "wsa881x-i2c-codec.2-000f";
-		/delete-property/ asoc-wsa-codec-prefixes = "SpkrMono";
-		/delete-property/ msm-vdd-wsa-switch-supply = <&pm8937_l5>;
-		/delete-property/ qcom,msm-vdd-wsa-switch-voltage = <1800000>;
-		/delete-property/ qcom,msm-vdd-wsa-switch-current = <10000>;
+		/delete-property/ asoc-wsa-codec-names;
+		/delete-property/ asoc-wsa-codec-prefixes;
+		/delete-property/ msm-vdd-wsa-switch-supply;
+		/delete-property/ qcom,msm-vdd-wsa-switch-voltage;
+		/delete-property/ qcom,msm-vdd-wsa-switch-current;
 	};
 
 	cdc_us_euro_sw: msm_cdc_pinctrl_us_euro_sw {
