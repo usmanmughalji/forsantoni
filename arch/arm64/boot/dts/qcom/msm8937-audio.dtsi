@@ -78,7 +78,7 @@
 				"WSA_SPK OUT", "VDD_WSA_SWITCH",
 				"SpkrMono WSA_IN", "WSA_SPK OUT";
 
-		qcom,cdc-us-euro-gpios = <&tlmm 63 0>;
+		/delete-property/ qcom,cdc-us-euro-gpios = <&tlmm 63 0>;
 		qcom,cdc-us-eu-gpios = <&cdc_us_euro_sw>;
 		qcom,pri-mi2s-gpios = <&cdc_pri_mi2s_gpios>;
 		qcom,quin-mi2s-gpios = <&cdc_quin_mi2s_gpios>;
@@ -124,11 +124,11 @@
 				<&pmic_analog_codec>;
 		asoc-codec-names = "msm-stub-codec.1", "msm-dig-codec",
 					"analog-codec";
-		asoc-wsa-codec-names = "wsa881x-i2c-codec.2-000f";
-		asoc-wsa-codec-prefixes = "SpkrMono";
-		msm-vdd-wsa-switch-supply = <&pm8937_l5>;
-		qcom,msm-vdd-wsa-switch-voltage = <1800000>;
-		qcom,msm-vdd-wsa-switch-current = <10000>;
+		/delete-property/ asoc-wsa-codec-names = "wsa881x-i2c-codec.2-000f";
+		/delete-property/ asoc-wsa-codec-prefixes = "SpkrMono";
+		/delete-property/ msm-vdd-wsa-switch-supply = <&pm8937_l5>;
+		/delete-property/ qcom,msm-vdd-wsa-switch-voltage = <1800000>;
+		/delete-property/ qcom,msm-vdd-wsa-switch-current = <10000>;
 	};
 
 	cdc_us_euro_sw: msm_cdc_pinctrl_us_euro_sw {
