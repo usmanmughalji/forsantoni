@@ -386,6 +386,9 @@
 	};
 
 	apc_vreg_corner: regulator@b018000 {
+		
+		/delete-property/ qcom,cpr-enable;
+		
 		compatible = "qcom,cpr-regulator";
 		reg = <0xb018000 0x1000>, <0xb011064 4>, <0xa4000 0x1000>;
 		reg-names = "rbcpr", "rbcpr_clk", "efuse_addr";
@@ -462,7 +465,7 @@
 				<(10000)     (15000)	(20000)>,
 				<0		0	      0>,
 				<0		0	      0>;
-		/delete-property/ qcom,cpr-enable;		
+		qcom,cpr-enable;		
 	};
 
 	eldo2_pm8937: eldo2 {
