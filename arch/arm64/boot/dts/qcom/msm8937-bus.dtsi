@@ -234,6 +234,8 @@
 			qcom,prio0 = <1>;
 			qcom,bus-dev = <&fab_pcnoc>;
 			qcom,mas-rpm-id = <ICBID_MASTER_CRYPTO>;
+			linux,phandle = <0xf7>;
+			phandle = <0xf7>;
 		};
 
 		mas_sdcc_1: mas-sdcc-1 {

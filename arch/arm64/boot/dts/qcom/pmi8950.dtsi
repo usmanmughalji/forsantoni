@@ -24,6 +24,8 @@
 		pmi8950_revid: qcom,revid@100 {
 			compatible = "qcom,qpnp-revid";
 			reg = <0x100 0x100>;
+			linux,phandle = <0xd9>;
+			phandle = <0xd9>;
 		};
 
 		qcom,power-on@800 {
@@ -37,6 +39,8 @@
 				regulator-name = "pon_spare_reg";
 				qcom,pon-spare-reg-addr = <0x8c>;
 				qcom,pon-spare-reg-bit = <1>;
+				linux,phandle = <0xdc>;
+				phandle = <0xdc>;
 			};
 		};
 
@@ -184,10 +188,16 @@
 			qcom,parallel-usb-min-current-ma = <1400>;
 			qcom,parallel-usb-9v-min-current-ma = <900>;
 			qcom,parallel-allowed-lowering-ma = <500>;
-			qcom,pmic-revid = <&pmi8950_revid>;
+			qcom,pmic-revid = <0xd9>;
 			qcom,force-aicl-rerun;
 			qcom,aicl-rerun-period-s = <180>;
-			qcom,autoadjust-vfloat;
+			dpdm-supply = <0xda>;
+			qcom,battery-data = <0xdb>;
+			status = "okay";
+			qcom,vchg_sns-vadc = <0xa2>;
+			qcom,vchg-adc-channel-id = <0x3>;
+			linux,phandle = <0xd4>;
+			phandle = <0xd4>;
 
 			qcom,chgr@1000 {
 				reg = <0x1000 0x100>;
@@ -281,6 +291,8 @@
 
 			smbcharger_charger_otg: qcom,smbcharger-boost-otg {
 				regulator-name = "smbcharger_charger_otg";
+				linux,phandle = <0xd3>;
+				phandle = <0xd3>;
 			};
 		};
 
@@ -294,10 +306,11 @@
 			qcom,bcl-mh-threshold-ma = <405>;
 			qcom,fg-iterm-ma = <150>;
 			qcom,fg-chg-iterm-ma = <100>;
-			qcom,pmic-revid = <&pmi8950_revid>;
+			qcom,pmic-revid = <0xd9>;
 			qcom,fg-cutoff-voltage-mv = <3500>;
 			qcom,cycle-counter-en;
 			qcom,capacity-learning-on;
+			qcom,battery-data = <0xdb>;
 
 			qcom,fg-soc@4000 {
 			status = "okay";
@@ -404,7 +417,7 @@
 			compatible = "qcom,qpnp-labibb-regulator";
 			#address-cells = <1>;
 			#size-cells = <1>;
-			qcom,pmic-revid = <&pmi8950_revid>;
+			qcom,pmic-revid = <0xd9>;
 			qcom,qpnp-labibb-mode = "lcd";
 
 			ibb_regulator: qcom,ibb@dc00 {
@@ -502,8 +515,10 @@
 			qcom,fs-curr-ua = <20000>;
 			qcom,led-strings-list = [00 01];
 			qcom,en-ext-pfet-sc-pro;
-			qcom,pmic-revid = <&pmi8950_revid>;
+			qcom,wled-stepper-en;
+			qcom,pmic-revid = <0xd9>;
 			qcom,cons-sync-write-delay-us = <1000>;
+			qcom,en-cabc;
 		};
 
 		flash_led: qcom,leds@d300 {
@@ -527,7 +542,7 @@
 			qcom,vph-pwr-droop-debounce-time = <10>;
 			qcom,headroom-sense-ch0-enabled;
 			qcom,headroom-sense-ch1-enabled;
-			qcom,pmic-revid = <&pmi8950_revid>;
+			qcom,pmic-revid = <0xd9>;
 
 			pmi8950_flash0: qcom,flash_0 {
 				label = "flash";
@@ -537,7 +552,9 @@
 				qcom,max-current = <1000>;
 				qcom,duration = <1280>;
 				qcom,id = <0>;
-				qcom,current = <625>;
+				qcom,current = <0x253>;
+				linux,phandle = <0x1a3>;
+				phandle = <0x1a3>;
 			};
 
 			pmi8950_flash1: qcom,flash_1 {
@@ -558,7 +575,9 @@
 						"torch0_trigger";
 				qcom,max-current = <200>;
 				qcom,id = <0>;
-				qcom,current = <120>;
+				qcom,current = <0x64>;
+				linux,phandle = <0x1a4>;
+				phandle = <0x1a4>;
 			};
 
 			pmi8950_torch1: qcom,torch_1 {
@@ -579,6 +598,8 @@
 				qcom,max-current = <200>;
 				qcom,id = <1>;
 				qcom,current = <100>;
+				linux,phandle = <0x1a5>;
+				phandle = <0x1a5>;
 			};
 
 			pmi8950_switch: qcom,switch {
@@ -590,6 +611,8 @@
 				qcom,duration = <1280>;
 				qcom,id = <2>;
 				qcom,current = <625>;
+				linux,phandle = <0x1a6>;
+				phandle = <0x1a6>;
 				reg0 {
 					regulator-name = "pon_spare_reg";
 				};
@@ -602,17 +625,16 @@
 			interrupts = <0x3 0xc0 0x0 IRQ_TYPE_EDGE_BOTH>,
 					<0x3 0xc0 0x1 IRQ_TYPE_EDGE_BOTH>;
 			interrupt-names = "hap-sc-irq", "hap-play-irq";
-			qcom,pmic-revid = <&pmi8950_revid>;
-			vcc_pon-supply = <&pon_perph_reg>;
+			qcom,pmic-revid = <0xd9>;
+			vcc_pon-supply = <0xdc>;
 			qcom,int-pwm-freq-khz = <505>;
 			qcom,play-mode = "direct";
 			qcom,wave-play-rate-us = <5263>;
-			qcom,actuator-type = <0>;
+			qcom,actuator-type = <0x1>;
 			qcom,wave-shape = "square";
-			qcom,vmax-mv = <2000>;
+			qcom,vmax-mv = <0xa8c>;
 			qcom,ilim-ma = <800>;
 			qcom,sc-deb-cycles = <8>;
-			qcom,en-brake;
 			qcom,brake-pattern = <0x3 0x3 0x0 0x0>;
 			qcom,wave-samples = <0x3e 0x3e 0x3e 0x3e 0x3e
 							0x3e 0x3e 0x3e>;

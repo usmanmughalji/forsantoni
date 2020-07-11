@@ -40,6 +40,10 @@
 			qcom,pon_1 {
 				qcom,pon-type = <0>;
 				qcom,pull-up = <1>;
+				qcom,support-reset = <0x1>;
+				qcom,s1-timer = <0x1180>;
+				qcom,s2-timer = <0x7d0>;
+				qcom,s2-type = <0x7>;
 				linux,code = <116>;
 			};
 
@@ -101,6 +105,8 @@
 					function = "analog";
 					input-enable;
 					qcom,amux-route = <3>;
+					linux,phandle = <0xd8>;
+					phandle = <0xd8>;
 				};
 			};
 
@@ -110,6 +116,8 @@
 					function = "analog";
 					input-enable;
 					qcom,amux-route = <1>;
+					linux,phandle = <0xd7>;
+					phandle = <0xd7>;
 				};
 			};
 		};
@@ -128,6 +136,19 @@
 			gpio-controller;
 			#gpio-cells = <2>;
 			qcom,gpios-disallowed = <3 4 6>;
+			linux,phandle = <0xc2>;
+			phandle = <0xc2>;
+
+			gpio@c400 {
+				qcom,mode = <0x0>;
+				qcom,output-type = <0x0>;
+				qcom,pull = <0x0>;
+				qcom,vin-sel = <0x2>;
+				qcom,out-strength = <0x3>;
+				qcom,src-sel = <0x0>;
+				qcom,master-en = <0x1>;
+				status = "okay";
+			};
 		};
 
 		pm8937_vadc: vadc@3100 {
@@ -142,7 +163,7 @@
 			qcom,vadc-poll-eoc;
 			#thermal-sensor-cells = <1>;
 			pinctrl-names = "default";
-			pinctrl-0 = <&pa_therm1_default &cas_therm_default>;
+			pinctrl-0 = <0xd7 0xd8>;
 
 			chan@5 {
 				label = "vcoin";
@@ -219,18 +240,6 @@
 				qcom,scale-function = <2>;
 				qcom,hw-settle-time = <2>;
 				qcom,fast-avg-setup = <0>;
-			};
-
-			chan@11 {
-				label = "pa_therm1";
-				reg = <0x11>;
-				qcom,decimation = <0>;
-				qcom,pre-div-channel-scaling = <0>;
-				qcom,calibration-type = "ratiometric";
-				qcom,scale-function = <2>;
-				qcom,hw-settle-time = <2>;
-				qcom,fast-avg-setup = <0>;
-				qcom,vadc-thermal-node;
 			};
 
 			chan@32 {
@@ -338,7 +347,6 @@
 		polling-delay = <0>;
 		thermal-sensors = <&pm8937_vadc 0x11>;
 		thermal-governor = "user_space";
-		wake-capable-sensor;
 
 		trips {
 			active-config0 {
@@ -354,7 +362,6 @@
 		polling-delay = <0>;
 		thermal-sensors = <&pm8937_vadc 0x32>;
 		thermal-governor = "user_space";
-		wake-capable-sensor;
 
 		trips {
 			active-config0 {
@@ -370,7 +377,6 @@
 		polling-delay = <0>;
 		thermal-sensors = <&pm8937_vadc 0x3c>;
 		thermal-governor = "user_space";
-		wake-capable-sensor;
 
 		trips {
 			active-config0 {
@@ -386,7 +392,6 @@
 		polling-delay = <0>;
 		thermal-sensors = <&pm8937_vadc 0x13>;
 		thermal-governor = "user_space";
-		wake-capable-sensor;
 
 		trips {
 			active-config0 {
@@ -402,7 +407,6 @@
 		polling-delay = <0>;
 		thermal-sensors = <&pm8937_adc_tm 0x36>;
 		thermal-governor = "user_space";
-		wake-capable-sensor;
 
 		trips {
 			active-config0 {
@@ -418,7 +422,6 @@
 		polling-delay = <0>;
 		thermal-governor = "step_wise";
 		thermal-sensors = <&pm8937_temp_alarm>;
-		wake-capable-sensor;
 
 		trips {
 			pm8937_trip0: pm8937-trip0 {

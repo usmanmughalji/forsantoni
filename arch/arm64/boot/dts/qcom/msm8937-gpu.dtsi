@@ -154,6 +154,8 @@
 					gfx_out_funnel_mm: endpoint {
 						remote-endpoint =
 						<&funnel_mm_in_gfx>;
+						linux,phandle = <0x186>;
+						phandle = <0x186>;
 					};
 				};
 			};

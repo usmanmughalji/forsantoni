@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2020, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2015-2018, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -149,9 +149,7 @@
 		i2c2 = &i2c_2;
 		i2c5 = &i2c_5;
 		spi3 = &spi_3;
-		spi6 = &spi_6;
 		i2c3 = &i2c_3;
-		i2c4 = &i2c_4;
 		sdhc1 = &sdhc_1; /* SDC1 eMMC slot */
 		sdhc2 = &sdhc_2; /* SDC2 for SD card */
 	};
@@ -398,7 +396,9 @@
 		clocks = <&clock_gcc clk_gcc_blsp1_uart2_apps_clk>,
 		<&clock_gcc clk_gcc_blsp1_ahb_clk>;
 		clock-names = "core", "iface";
-		status = "disabled";
+		status = "ok";
+		pinctrl-names = "default";
+		pinctrl-0 = <0xaa>;
 	};
 
 	dma_blsp1: qcom,sps-dma@7884000 { /* BLSP1 */
@@ -450,6 +450,8 @@
 			<0xb11101c 0x8>;
 		reg-names = "cc_base", "meas";
 		#clock-cells = <1>;
+		linux,phandle = <0x104>;
+		phandle = <0x104>;
 	};
 
 	clock_gcc_mdss: qcom,gcc-mdss@1800000 {
@@ -578,7 +580,7 @@
 		reg = <0x78b7000 0x600>;
 		interrupt-names = "qup_irq";
 		interrupts = <0 97 0>;
-		qcom,clk-freq-out = <400000>;
+		qcom,clk-freq-out = <0x186a0>;
 		qcom,clk-freq-in  = <19200000>;
 		clock-names = "iface_clk", "core_clk";
 		clocks = <&clock_gcc clk_gcc_blsp1_ahb_clk>,
@@ -592,32 +594,6 @@
 		qcom,master-id = <86>;
 		dmas = <&dma_blsp1 8 64 0x20000020 0x20>,
 			<&dma_blsp1 9 32 0x20000020 0x20>;
-		dma-names = "tx", "rx";
-		status = "disabled";
-	};
-
-	i2c_4: i2c@78b8000 { /* BLSP1 QUP4 */
-		compatible = "qcom,i2c-msm-v2";
-		#address-cells = <1>;
-		#size-cells = <0>;
-		reg-names = "qup_phys_addr";
-		reg = <0x78b8000 0x600>;
-		interrupt-names = "qup_irq";
-		interrupts = <0 98 0>;
-		qcom,clk-freq-out = <400000>;
-		qcom,clk-freq-in  = <19200000>;
-		clock-names = "iface_clk", "core_clk";
-		clocks = <&clock_gcc clk_gcc_blsp1_ahb_clk>,
-			<&clock_gcc clk_gcc_blsp1_qup4_i2c_apps_clk>;
-
-		pinctrl-names = "i2c_active", "i2c_sleep";
-		pinctrl-0 = <&i2c_4_active>;
-		pinctrl-1 = <&i2c_4_sleep>;
-		qcom,noise-rjct-scl = <0>;
-		qcom,noise-rjct-sda = <0>;
-		qcom,master-id = <86>;
-		dmas = <&dma_blsp1 10 64 0x20000020 0x20>,
-			<&dma_blsp1 11 32 0x20000020 0x20>;
 		dma-names = "tx", "rx";
 		status = "disabled";
 	};
@@ -646,6 +622,25 @@
 			<&dma_blsp2 5 32 0x20000020 0x20>;
 		dma-names = "tx", "rx";
 		status = "disabled";
+
+		nq@28 {
+			compatible = "qcom,nq-nci";
+			reg = <0x28>;
+			qcom,nq-irq = <0x86 0x11 0x0>;
+			qcom,nq-ven = <0x86 0x10 0x0>;
+			qcom,nq-firm = <0x86 0x82 0x0>;
+			qcom,nq-clkreq = <0xc2 0x5 0x0>;
+			interrupt-parent = <0x86>;
+			qcom,clk-src = "BBCLK2";
+			interrupts = <0x11 0x0>;
+			interrupt-names = "nfc_irq";
+			pinctrl-names = "nfc_active", "nfc_suspend";
+			pinctrl-0 = <0xc3 0xc4>;
+			pinctrl-1 = <0xc5 0xc6>;
+			clocks = <0x25 0x498938e5>;
+			clock-names = "ref_clk";
+
+		};
 	};
 
 	spi_3: spi@78b7000 { /* BLSP1 QUP3 */
@@ -671,68 +666,6 @@
 		qcom,bam-consumer-pipe-index = <8>;
 		qcom,bam-producer-pipe-index = <9>;
 		qcom,master-id = <86>;
-		status = "disabled";
-	};
-
-	spi_6: spi@7af6000 { /* BLSP2 QUP1 */
-		compatible = "qcom,spi-qup-v2";
-		#address-cells = <1>;
-		#size-cells = <0>;
-		reg-names = "spi_physical", "spi_bam_physical";
-		reg = <0x7af6000 0x600>,
-			<0x7ac4000 0x1f000>;
-		interrupt-names = "spi_irq", "spi_bam_irq";
-		interrupts = <0 300 0>, <0 239 0>;
-		spi-max-frequency = <19200000>;
-		pinctrl-names = "spi_default", "spi_sleep";
-		pinctrl-0 = <&spi6_default &spi6_cs0_active>;
-		pinctrl-1 = <&spi6_sleep &spi6_cs0_sleep>;
-		clocks = <&clock_gcc clk_gcc_blsp2_ahb_clk>,
-			<&clock_gcc clk_gcc_blsp2_qup1_spi_apps_clk>;
-		clock-names = "iface_clk", "core_clk";
-		qcom,infinite-mode = <0>;
-		qcom,use-bam;
-		qcom,use-pinctrl;
-		qcom,ver-reg-exists;
-		qcom,bam-consumer-pipe-index = <6>;
-		qcom,bam-producer-pipe-index = <7>;
-		qcom,master-id = <84>;
-		status = "disabled";
-	};
-
-	blsp2_uart2: uart@7af0000 { /* BLSP2 UART2 */
-		compatible = "qcom,msm-hsuart-v14";
-		reg = <0x7af0000 0x200>,
-			<0x7ac4000 0x1f000>;
-		reg-names = "core_mem", "bam_mem";
-		interrupt-names = "core_irq", "bam_irq", "wakeup_irq";
-		#address-cells = <0>;
-		interrupt-parent = <&blsp2_uart2>;
-		interrupts = <0 1 2>;
-		#interrupt-cells = <1>;
-		interrupt-map-mask = <0xffffffff>;
-		interrupt-map = <0 &intc 0 307 0
-				1 &intc 0 239 0
-				2 &tlmm 21 0>;
-
-		qcom,inject-rx-on-wakeup;
-		qcom,rx-char-to-inject = <0xfd>;
-
-		qcom,bam-tx-ep-pipe-index = <2>;
-		qcom,bam-rx-ep-pipe-index = <3>;
-		qcom,master-id = <84>;
-		clock-names = "core_clk", "iface_clk";
-		clocks = <&clock_gcc clk_gcc_blsp2_uart2_apps_clk>,
-				<&clock_gcc clk_gcc_blsp2_ahb_clk>;
-		pinctrl-names = "sleep", "default";
-		pinctrl-0 = <&blsp2_uart2_sleep>;
-		pinctrl-1 = <&blsp2_uart2_active>;
-		qcom,msm-bus,name = "blsp2_uart2";
-		qcom,msm-bus,num-cases = <2>;
-		qcom,msm-bus,num-paths = <1>;
-		qcom,msm-bus,vectors-KBps =
-				<84 512 0 0>,
-				<84 512 500 800>;
 		status = "disabled";
 	};
 
@@ -778,6 +711,8 @@
 		freq-tbl-khz =
 			<  400000 >,
 			<  533333 >;
+		linux,phandle = <0xcc>;
+		phandle = <0xcc>;
 	};
 
 	cpubw: qcom,cpubw {
@@ -796,6 +731,8 @@
 			<  5712 /*  748.8 MHz */ >,     /* NOM   */
 			<  6152 /*  806.4 MHz */ >,     /* NOM+  */
 			<  7031 /*  921.6 MHz */ >;     /* TURBO */
+		linux,phandle = <0xcb>;
+		phandle = <0xcb>;
 	};
 
 	qcom,cpu-bwmon {
@@ -804,7 +741,7 @@
 		reg-names = "base", "global_base";
 		interrupts = <0 183 4>;
 		qcom,mport = <0>;
-		qcom,target-dev = <&cpubw>;
+		qcom,target-dev = <0xcb>;
 	};
 
 	mincpubw: qcom,mincpubw {
@@ -823,11 +760,13 @@
 			<  5712 /*  748.8 MHz */ >,     /* NOM   */
 			<  6152 /*  806.4 MHz */ >,     /* NOM+  */
 			<  7031 /*  921.6 MHz */ >;     /* TURBO */
+		linux,phandle = <0xcd>;
+		phandle = <0xcd>;
 	};
 
 	devfreq-cpufreq {
 		cpubw-cpufreq {
-		target-dev = <&cpubw>;
+		target-dev = <0xcb>;
 		cpu-to-dev-map-0 =
 			<  998400  2929 >,      /* SVS   */
 			< 1094400  5053 >,	/* NOM   */
@@ -842,7 +781,7 @@
 		};
 
 		cci-cpufreq {
-		target-dev = <&cci_cache>;
+		target-dev = <0xcc>;
 		cpu-to-dev-map-0 =
 			<  998400  400000 >,    /* SVS   */
 			< 1094400  400000 >,	/* NOM   */
@@ -857,7 +796,7 @@
 		};
 
 		mincpubw-cpufreq {
-			target-dev = <&mincpubw>;
+			target-dev = <0xcd>;
 			cpu-to-dev-map-0 =
 				< 1094400 2929 >,
 				< 1497600 4248 >;
@@ -874,7 +813,7 @@
 		reg-names = "core_mem", "bam_mem";
 		interrupt-names = "core_irq", "bam_irq", "wakeup_irq";
 		#address-cells = <0>;
-		interrupt-parent = <&blsp2_uart1>;
+		interrupt-parent = <0xce>;
 		interrupts = <0 1 2>;
 		#interrupt-cells = <1>;
 		interrupt-map-mask = <0xffffffff>;
@@ -901,6 +840,8 @@
 				<84 512 0 0>,
 				<84 512 500 800>;
 		status = "disabled";
+		linux,phandle = <0xce>;
+		phandle = <0xce>;
 	};
 
 	qcom,ipc-spinlock@1905000 {
@@ -1008,7 +949,7 @@
 		HSUSB_1p8-supply = <&pm8937_l7>;
 		HSUSB_3p3-supply = <&pm8937_l13>;
 		qcom,vdd-voltage-level = <0 1200000 1200000>;
-		vbus_otg-supply = <&smbcharger_charger_otg>;
+		vbus_otg-supply = <0xd3>;
 
 		qcom,hsusb-otg-phy-type = <3>; /* SNPS Femto PHY */
 		qcom,hsusb-otg-mode = <3>; /* OTG mode */
@@ -1047,6 +988,10 @@
 			 <&clock_gcc GCC_QUSB2_PHY_BCR>,
 			 <&clock_gcc GCC_USB2_HS_PHY_ONLY_BCR>;
 		reset-names = "core_reset", "phy_reset", "phy_por_reset";
+		qcom,usbin-vadc = <0xa2>;
+		extcon = <0xd4>;
+		linux,phandle = <0xda>;
+		phandle = <0xda>;
 
 		qcom,usbbam@78c4000 {
 			compatible = "qcom,usb-bam-msm";
@@ -1109,6 +1054,8 @@
 		interrupt-controller;
 		#interrupt-cells = <4>;
 		cell-index = <0>;
+		linux,phandle = <0xd5>;
+		phandle = <0xd5>;
 	};
 
 	qcom,chd {
@@ -1136,9 +1083,9 @@
 			reg = <0x10 8>;
 		};
 
-		dload_type@1c {
+		dload_type@18 {
 			compatible = "qcom,msm-imem-dload-type";
-			reg = <0x1c 4>;
+			reg = <0x18 0x4>;
 		};
 
 		restart_reason@65c {
@@ -1192,6 +1139,18 @@
 			qcom,allocate-boot-time;
 			label = "modem";
 		};
+	};
+
+	snfuse@0xa0128 {
+		compatible = "qcom,sn-fuse";
+		reg = <0xa0128 0x4>;
+		reg-names = "sn-base";
+	};
+
+	secbootfuse@0xa41d0 {
+		compatible = "qcom,sec-boot-fuse";
+		reg = <0xa41d0 0x4>;
+		reg-names = "sec-boot-base";
 	};
 
 	jtag_mm0: jtagmm@61bc000 {
@@ -1429,8 +1388,9 @@
 		qcom,msm_fastrpc_compute_cb {
 			compatible = "qcom,msm-fastrpc-legacy-compute-cb";
 			label = "adsprpc-smd";
-			iommus = <&apps_iommu 0x2008 0x7>;
+			iommus = <0x6e 0xe>;
 			sids = <0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf>;
+			qcom,virtual-addr-pool = <0x80000000 0x7fffffff>;
 		};
 	};
 
@@ -1502,7 +1462,22 @@
 		qcom,ice-clk-rates = <200000000 100000000>;
 
 		qcom,scaling-lower-bus-speed-mode = "DDR52";
-		status = "disabled";
+		status = "ok";
+		vdd-supply = <0xdf>;
+		qcom,vdd-voltage-level = <0x2c4020 0x2c4020>;
+		qcom,vdd-current-level = <0xc8 0x8b290>;
+		qcom,vdd-always-on;
+		vdd-io-supply = <0xa8>;
+		qcom,vdd-io-always-on;
+		qcom,vdd-io-lpm-sup;
+		qcom,vdd-io-voltage-level = <0x1b7740 0x1b7740>;
+		qcom,vdd-io-current-level = <0xc8 0x4f588>;
+		pinctrl-names = "active", "sleep";
+		pinctrl-0 = <0xe0 0xe1 0xe2 0xe3>;
+		pinctrl-1 = <0xe4 0xe5 0xe6 0xe7>;
+		qcom,clk-rates = <0x61a80 0x1312d00 0x17d7840 0x2faf080 0x5f5e100 0xb71b000 0x16e36000>;
+		qcom,nonremovable;
+		qcom,bus-speed-mode = "HS400_1p8v", "HS200_1p8v", "DDR_1p8v";
 	};
 
 	sdhc_2: sdhci@7864900 {
@@ -1541,12 +1516,24 @@
 			<&clock_gcc clk_gcc_sdcc2_apps_clk>;
 		clock-names = "iface_clk", "core_clk";
 
-		status = "disabled";
+		status = "ok";
+		vdd-supply = <0xe8>;
+		qcom,vdd-voltage-level = <0x2d0370 0x2d0370>;
+		qcom,vdd-current-level = <0x3a98 0xc3500>;
+		vdd-io-supply = <0xe9>;
+		qcom,vdd-io-voltage-level = <0x1b7740 0x2d0370>;
+		qcom,vdd-io-current-level = <0xc8 0x55f0>;
+		pinctrl-names = "active", "sleep";
+		pinctrl-0 = <0xea 0xeb 0xec 0xed>;
+		pinctrl-1 = <0xee 0xef 0xf0 0xf1>;
+		cd-gpios = <0x86 0x43 0x1>;
+		qcom,clk-rates = <0x61a80 0x1312d00 0x17d7840 0x2faf080 0x5f5e100 0xbebc200>;
+		qcom,bus-speed-mode = "SDR12", "SDR25", "SDR50", "DDR50", "SDR104";
 	};
 
-	qcom_seecom: qseecom@85b00000 {
+	qcom_seecom: qseecom@84A00000 {
 		compatible = "qcom,qseecom";
-		reg = <0x85b00000 0x800000>;
+		reg = <0x84a00000 0x1900000>;
 		reg-names = "secapp-region";
 		qcom,hlos-num-ce-hw-instances = <1>;
 		qcom,hlos-ce-hw-instance = <0>;
@@ -1677,7 +1664,6 @@
 		qcom,pil-mss-memsetup;
 		qcom,firmware-name = "modem";
 		qcom,pil-self-auth;
-		qcom,sequential-fw-load;
 		qcom,override-acc-1 = <0x80800000>;
 		qcom,sysmon-id = <0>;
 		qcom,ssctl-instance-id = <0x12>;

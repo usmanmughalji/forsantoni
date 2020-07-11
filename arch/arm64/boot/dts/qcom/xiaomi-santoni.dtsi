@@ -66,6 +66,7 @@
 			default-state = "off";
 			retain-state-suspended;
 		};
+		
 		purple {
 			label = "purple";
 			linux,default-trigger = "none";
@@ -73,6 +74,12 @@
 			retain-state-suspended;
 		};
 
+	};
+
+	aw87319@58 {
+		compatible = "awinic,aw87319_pa";
+		reg = <0x58>;
+		qcom,ext_pa_spk_aw87319_rst = <0x86 0x7c 0x0>;
 	};
 };
 
